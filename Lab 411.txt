@@ -1,0 +1,75 @@
+My project in tinkercad :
+ https://www.tinkercad.com/things/9cDDR8evg7q 
+/////////------/////////------/////////------/////////------/////////------/////////------
+ Code :
+#include <LiquidCrystal.h>
+// the numbers of the interface pins.
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+//I need 3 Variable
+//sensorInput SI:use to store the sensor input
+//temp T:use to store temperature in degrees
+//sensePin SP:the Arduino Pin that will read the sensor output
+
+int sensorInput;
+double temp;
+int sensePin = A0;
+
+void setup()
+{
+  //Pin of the led.
+  pinMode(13, OUTPUT);
+  
+  //Initialize the LCD's number of columns and rows.
+  lcd.begin(16, 2);
+  Serial.begin(9600);
+}
+
+void loop()
+{  
+  //Set the cursor to column 0, line 0
+  lcd.setCursor(0, 0);
+  
+  //Read the analog sensor and store it.
+  sensorInput = analogRead(A0);
+  //Find percentage of input reading.
+  temp = (double)sensorInput / 1024;
+  //Multiply by 5V to get voltage.
+  temp = temp * 5;
+  //Subtract the offset.
+  temp = temp - 0.5;
+  //Convert to degrees.
+  temp = temp * 100;
+  
+  if (temp > 35)
+  {
+    tone(8, 800, 300);  //INPUT - FREQUENCY - TIME THAT LASTS
+    delay(250);
+    
+  	digitalWrite(13, HIGH);
+  	delay(500); // Wait for 500 millisecond(s)
+  	digitalWrite(13, LOW);
+  	delay(500); // Wait for 500 millisecond(s)
+  }
+  
+  else if (temp > 25)
+  {
+    tone(8, 500, 300);//INPUT - FREQUENCY - TIME THAT LASTS
+    delay(500);
+
+    digitalWrite(13, HIGH);
+    delay(500); // Wait for 500 millisecond(s)
+    digitalWrite(13, LOW);
+    delay(500); // Wait for 500 millisecond(s)
+  }
+  //lcd.setCursor(0, 0);
+  //lcd.print("Farah 1171456 ");
+ // lcd.setCursor(0, 1);
+  lcd.print("Temperature: ");
+  
+  //Set the cursor to column 0, line 1
+  lcd.setCursor(0,1 );
+  lcd.print(temp);
+  
+  lcd.print(" Celsius");
+
+}
